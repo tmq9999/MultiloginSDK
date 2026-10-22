@@ -148,6 +148,24 @@ class ProfileSearchRequest(RequestModel):
     password_restricted: list[str] = Field(default_factory=list)
     notes: str = ""
 
+    def to_wire(self) -> dict[str, Any]:
+        """Always send the fields the live search endpoint treats as required."""
+        payload = super().to_wire()
+        required = (
+            "is_removed",
+            "core_version",
+            "limit",
+            "offset",
+            "search_text",
+            "folder_id",
+            "storage_type",
+            "order_by",
+            "sort",
+        )
+        for name in required:
+            payload.setdefault(name, getattr(self, name))
+        return payload
+
 
 class ProfileRemoveRequest(RequestModel):
     ids: list[str] = Field(min_length=1)
@@ -170,3 +188,10 @@ class ProfileSummary(ResponseModel):
 
 class ProfileSearchData(ResponseModel):
     profiles: list[ProfileSummary]
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_null_profiles(cls, values: Any) -> Any:
+        if isinstance(values, dict) and values.get("profiles") is None:
+            return {**values, "profiles": []}
+        return values

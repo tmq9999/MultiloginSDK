@@ -27,7 +27,17 @@ CASES = [
         "search",
         ProfileSearchRequest(limit=10, offset=0, search_text=""),
         "/profile/search",
-        {"limit": 10, "offset": 0, "search_text": ""},
+        {
+            "is_removed": False,
+            "core_version": 1,
+            "limit": 10,
+            "offset": 0,
+            "search_text": "",
+            "folder_id": "",
+            "storage_type": "all",
+            "order_by": "created_at",
+            "sort": "asc",
+        },
         {"profiles": []},
     ),
     (

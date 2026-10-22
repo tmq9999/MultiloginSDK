@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from multilogin_sdk.models.profiles import (
     ProfileCreateRequest,
     ProfilePartialUpdateRequest,
+    ProfileSearchData,
     ProfileSearchRequest,
 )
 
@@ -47,3 +48,26 @@ def test_partial_preserves_explicit_false():
 def test_search_boundaries(kwargs):
     with pytest.raises(ValidationError):
         ProfileSearchRequest(**kwargs)
+
+
+def test_search_serializes_its_server_required_defaults():
+    payload = ProfileSearchRequest(limit=1, offset=0).to_wire()
+
+    assert {
+        "is_removed": False,
+        "core_version": 1,
+        "limit": 1,
+        "offset": 0,
+        "search_text": "",
+        "folder_id": "",
+        "storage_type": "all",
+        "order_by": "created_at",
+        "sort": "asc",
+    }.items() <= payload.items()
+
+
+def test_search_response_normalizes_null_profiles_from_live_api():
+    assert (
+        ProfileSearchData.model_validate({"profiles": None, "total_count": 0}).profiles
+        == []
+    )
