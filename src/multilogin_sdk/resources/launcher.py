@@ -1,4 +1,6 @@
 """Browser Launcher operations with no implicit API version fallback."""
+from contextlib import AbstractContextManager, AbstractAsyncContextManager
+from .. import _session
 from .._operations import Operation,RequestSpec
 from .._transport import SyncTransport,AsyncTransport
 from ..models.common import ApiResponse
@@ -51,6 +53,13 @@ class LauncherResource:
     def version(self) -> ApiResponse[dict[str,object]]:
         return self._transport.send(build_version(),dict[str,object])
 
+    def wait_ready(self,profile_id: str,*,timeout: float=120,poll_interval: float=1) -> ApiResponse[dict[str,object]]:
+        return _session.wait_ready(self,profile_id,timeout=timeout,poll_interval=poll_interval)
+
+    def session(self,request: LauncherStartRequest,*,wait_timeout: float=120,poll_interval: float=1,cleanup_timeout: float=10) -> AbstractContextManager[BrowserConnection]:
+        return _session.session(self,request,wait_timeout=wait_timeout,poll_interval=poll_interval,cleanup_timeout=cleanup_timeout)
+
+
 class AsyncLauncherResource:
     def __init__(self,transport: AsyncTransport) -> None:
         self._transport=transport
@@ -73,3 +82,9 @@ class AsyncLauncherResource:
     async def version(self) -> ApiResponse[dict[str,object]]:
         return await self._transport.send(build_version(),dict[str,object])
 
+
+    async def wait_ready(self,profile_id: str,*,timeout: float=120,poll_interval: float=1) -> ApiResponse[dict[str,object]]:
+        return await _session.async_wait_ready(self,profile_id,timeout=timeout,poll_interval=poll_interval)
+
+    def session(self,request: LauncherStartRequest,*,wait_timeout: float=120,poll_interval: float=1,cleanup_timeout: float=10) -> AbstractAsyncContextManager[BrowserConnection]:
+        return _session.async_session(self,request,wait_timeout=wait_timeout,poll_interval=poll_interval,cleanup_timeout=cleanup_timeout)

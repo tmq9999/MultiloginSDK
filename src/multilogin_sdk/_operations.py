@@ -1,4 +1,5 @@
 """Declarative requests shared by sync and async execution."""
+import httpx
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Literal, Mapping
@@ -25,6 +26,7 @@ class RequestSpec:
     query: Mapping[str, Any] = field(default_factory=dict)
     json_body: Mapping[str, Any] | None = None
     strict_mode: bool | None = None
+    timeout: httpx.Timeout | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, 'path_params', deepcopy(dict(self.path_params)))

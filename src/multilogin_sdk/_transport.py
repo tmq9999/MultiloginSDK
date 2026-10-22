@@ -47,8 +47,8 @@ class _Common:
         if strict is not None:
             headers['X-Strict-Mode'] = str(strict).lower()
         query = {k: str(v).lower() if isinstance(v, bool) else v for k, v in spec.query.items()}
-        timeout = self.config.timeout.as_dict()
-        if op.read_timeout is not None:
+        timeout = (spec.timeout or self.config.timeout).as_dict()
+        if spec.timeout is None and op.read_timeout is not None:
             timeout['read'] = op.read_timeout
         # Do not use Client.build_request: injected session defaults could leak
         # its Authorization/cookies into noauth or other service requests.
