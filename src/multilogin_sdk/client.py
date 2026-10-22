@@ -7,6 +7,9 @@ import httpx
 from ._operations import Service
 from ._transport import SERVICES, AsyncTransport, SyncTransport
 from .config import ClientConfig
+from .resources.auth import AuthResource, AsyncAuthResource
+from .resources.workspaces import WorkspacesResource, AsyncWorkspacesResource
+from .resources.folders import FoldersResource, AsyncFoldersResource
 
 
 def _tokens(token: str | None, service_tokens: Mapping[Service, str] | None) -> dict[Service, str]:
@@ -21,9 +24,16 @@ class MultiloginClient:
                  sessions: Mapping[Service, httpx.Client] | None = None) -> None:
         self.config = config or ClientConfig()
         self._transport = SyncTransport(self.config, tokens=_tokens(token, service_tokens), sessions=sessions)
+        self.auth = AuthResource(self._transport)
+        self.workspaces = WorkspacesResource(self._transport)
+        self.folders = FoldersResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)
+
+    def switch_workspace(self, *, email: str, refresh_token: str, workspace_id: str) -> Self:
+        tokens = self.auth.refresh(email, refresh_token, workspace_id).data
+        return self.with_token(tokens.token.get_secret_value())
 
     def close(self) -> None:
         self._transport.close()
@@ -43,9 +53,16 @@ class AsyncMultiloginClient:
                  sessions: Mapping[Service, httpx.AsyncClient] | None = None) -> None:
         self.config = config or ClientConfig()
         self._transport = AsyncTransport(self.config, tokens=_tokens(token, service_tokens), sessions=sessions)
+        self.auth = AsyncAuthResource(self._transport)
+        self.workspaces = AsyncWorkspacesResource(self._transport)
+        self.folders = AsyncFoldersResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)
+
+    async def switch_workspace(self, *, email: str, refresh_token: str, workspace_id: str) -> Self:
+        tokens = (await self.auth.refresh(email, refresh_token, workspace_id)).data
+        return self.with_token(tokens.token.get_secret_value())
 
     async def aclose(self) -> None:
         await self._transport.aclose()

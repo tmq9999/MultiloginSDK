@@ -279,9 +279,11 @@
     "path": "/user/signin",
     "body_kind": "json",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -294,9 +296,11 @@
     "path": "/user/refresh_token",
     "body_kind": "json",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -338,10 +342,12 @@
     "method": "GET",
     "path": "/user/workspaces",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -383,10 +389,12 @@
     "method": "GET",
     "path": "/workspace/folders",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -429,9 +437,11 @@
     "path": "/workspace/automation_token",
     "body_kind": null,
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -439,14 +449,16 @@
     "name": "Workspace Create Folder",
     "group": "Profile Access Management",
     "operation": "workspace_create_folder",
-    "service": "unresolved",
+    "service": "cloud",
     "method": "POST",
     "path": "/workspace/folder_create",
     "body_kind": "json",
     "read_only": false,
-    "status": "blocked",
-    "reason": "Unresolved baseUrl",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -454,14 +466,16 @@
     "name": "Workspace Update Folder",
     "group": "Profile Access Management",
     "operation": "workspace_update_folder",
-    "service": "unresolved",
+    "service": "cloud",
     "method": "POST",
     "path": "/workspace/folder_update",
     "body_kind": "json",
     "read_only": false,
-    "status": "blocked",
-    "reason": "Unresolved baseUrl",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -469,14 +483,16 @@
     "name": "Workspace Remove Folders",
     "group": "Profile Access Management",
     "operation": "workspace_remove_folders",
-    "service": "unresolved",
+    "service": "cloud",
     "method": "POST",
     "path": "/workspace/folders_remove",
     "body_kind": "json",
     "read_only": false,
-    "status": "blocked",
-    "reason": "Unresolved baseUrl",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed wire contract; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_access.py::test_access_wire_contract"
+    ],
     "alias_of": null
   },
   {

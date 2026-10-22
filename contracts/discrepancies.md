@@ -4,7 +4,7 @@ Evidence: Postman collection export and audit dated 2026-10-22; no live Multilog
 
 | Issue | Status | Evidence / treatment |
 |---|---|---|
-| 8 requests use baseUrl | open | 2026-10-23 CLI globals var get baseUrl reports variable absent. Endpoint paths independently match published vendor reference; resolve through vendor documentation before implementing affected folders. |
+| 8 requests use baseUrl | partially resolved | Global variable absent. Export saved requests for User Revoke Token, Workspace Create Folder and Workspace Remove Folders explicitly substitute https://api.multilogin.com for the same variable. Apply that origin to MVP folder_update as an inference from the common collection variable; remaining non-MVP variable requests stay blocked pending review. No live verification. |
 | Cloud to Local points to local_to_cloud | blocked | Both exported URL paths identical; defer both direction helpers. |
 | Mobile import confirm absent | blocked | Validate description references confirm, but no matching request ID. Do not invent it. |
 | HTTP vs envelope status | resolved for parser | Saved signin/refresh/folders/core examples: HTTP500 with envelope200. Runtime HTTP status wins; keep negative fixtures. |
