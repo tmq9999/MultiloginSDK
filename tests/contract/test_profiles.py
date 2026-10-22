@@ -86,3 +86,26 @@ async def test_profile_wire_contract(mode, method, payload, path, body, data):
     assert not seen[0].url.query
     await resolve(c.close() if mode == "sync" else c.aclose())
     await resolve(s.close() if mode == "sync" else s.aclose())
+
+
+async def test_strict_remove_requires_explicit_permanently(mode):
+    from multilogin_sdk import ClientConfig
+
+    seen = []
+
+    def handler(req):
+        seen.append(req)
+        return httpx.Response(200, json=envelope())
+
+    s = session_for(mode, handler)
+    c = (MultiloginClient if mode == "sync" else AsyncMultiloginClient)(
+        "T", config=ClientConfig(strict_mode=True), sessions={"cloud": s}
+    )
+    with pytest.raises(ValueError):
+        await resolve(c.profiles.remove(ProfileRemoveRequest(ids=["p"])))
+    assert seen == []
+    await resolve(c.profiles.remove(ProfileRemoveRequest(ids=["p"], permanently=False)))
+    assert json.loads(seen[0].content) == {"ids": ["p"], "permanently": False}
+    assert seen[0].headers["X-Strict-Mode"] == "true"
+    await resolve(c.close() if mode == "sync" else c.aclose())
+    await resolve(s.close() if mode == "sync" else s.aclose())

@@ -1,6 +1,6 @@
 # MultiloginSDK Python MVP Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Xây Python SDK sync/async cho 21 request MVP quản lý authentication, workspace, folders, browser profiles và Launcher.
 
@@ -57,12 +57,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `check_coverage(registry: Path) -> list[str]`: empty list là hợp lệ; CLI `python scripts/check_coverage.py` exit0 khi hợp lệ, exit1 khi lỗi.
 - Registry entry: `request_id`, `name`, `group`, `operation`, `service`, `method`, `path`, `body_kind`, `read_only`, `status`, `reason`, `test_ids`, `alias_of`. service thuộc cloud/launcher/cookies/unresolved; status implemented/alias/deferred/blocked.
 
-- [ ] Viết `test_recursive_registry`: fixture có nested ADB và alias, assert mỗi ID xuất hiện đúng một lần; `test_missing_duplicate_and_wrong_alias`: missing/duplicate ID, alias khác method/path phải báo lỗi; `test_sanitized_export`: token/header không xuất hiện trong registry. Tạo minimal dev setup pytest trong pyproject nếu chưa có để chạy test.
-- [ ] Chạy `python -m pytest tests/contract/test_registry.py -q`; kỳ vọng FAIL do scripts chưa có.
-- [ ] Viết scripts; tải collection bằng CLI đã có: `/home/mquangprovip0503/.local/bin/postman collection get 46206122-78bf4173-0a22-4651-890d-b160177d47b1 --json` vào file private tạm, không commit raw export. Tra CLI help để đọc chỉ biến baseUrl thuộc global `00f51822-8551-4be0-804b-53a692f93dee`; không dump toàn bộ global. Nếu thiếu baseUrl, đối chiếu vendor hoặc giữ blocked; không đoán.
-- [ ] Đọc lại audit và ghi 8 discrepancy trong spec vào discrepancies.md; mỗi mục có evidence, trạng thái và operation bị ảnh hưởng. Quick v3 canvas_noise phải xác nhận từ nguồn cụ thể trước khi khóa serializer; không sửa template hàng loạt theo suy đoán.
-- [ ] Chạy lại test và coverage CLI: 125 IDs duy nhất; 21 request MVP được chọn đích danh như spec, hiện deferred với reason planned; chỉ chuyển implemented khi task tương ứng qua tests. Alias chưa triển khai không được tính implemented.
-- [ ] Commit: `chore: establish sanitized Multilogin contract registry`.
+- [x] Viết `test_recursive_registry`: fixture có nested ADB và alias, assert mỗi ID xuất hiện đúng một lần; `test_missing_duplicate_and_wrong_alias`: missing/duplicate ID, alias khác method/path phải báo lỗi; `test_sanitized_export`: token/header không xuất hiện trong registry. Tạo minimal dev setup pytest trong pyproject nếu chưa có để chạy test.
+- [x] Chạy `python -m pytest tests/contract/test_registry.py -q`; kỳ vọng FAIL do scripts chưa có.
+- [x] Viết scripts; tải collection bằng CLI đã có: `/home/mquangprovip0503/.local/bin/postman collection get 46206122-78bf4173-0a22-4651-890d-b160177d47b1 --json` vào file private tạm, không commit raw export. Tra CLI help để đọc chỉ biến baseUrl thuộc global `00f51822-8551-4be0-804b-53a692f93dee`; không dump toàn bộ global. Nếu thiếu baseUrl, đối chiếu vendor hoặc giữ blocked; không đoán.
+- [x] Đọc lại audit và ghi 8 discrepancy trong spec vào discrepancies.md; mỗi mục có evidence, trạng thái và operation bị ảnh hưởng. Quick v3 canvas_noise phải xác nhận từ nguồn cụ thể trước khi khóa serializer; không sửa template hàng loạt theo suy đoán.
+- [x] Chạy lại test và coverage CLI: 125 IDs duy nhất; 21 request MVP được chọn đích danh như spec, hiện deferred với reason planned; chỉ chuyển implemented khi task tương ứng qua tests. Alias chưa triển khai không được tính implemented.
+- [x] Commit: `chore: establish sanitized Multilogin contract registry`.
 
 ## Task 2: Typed models và request representation — M1
 
@@ -77,11 +77,11 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `ApiStatus(http_code: int, error_code: str, message: str)`; `ApiResponse[T](data: T, status: ApiStatus, http_status: int, request_id: str | None)`, response models extra='allow'.
 - `MultiloginError`, `HttpError`, `ApiError`, `ProtocolError`, `TransportError`, `LauncherUnavailable`, `PaginationLimitError`, `PollingTimeout`; common attributes operation/status_code/api_error_code/request_id, redacted message only.
 
-- [ ] Test `test_omitted_vs_falsy`: assert to_wire preserves False, 0, '', []; excludes UNSET/unset fields; explicit None rejected unless field annotated nullable. `test_extra_response_preserved` retains unknown response fields. `test_invalid_config` rejects negative retries/timeouts and base URLs containing embedded credentials/query/fragment.
-- [ ] Run `python -m pytest tests/unit/test_models.py tests/unit/test_config.py -q`; expected FAIL before implementation.
-- [ ] Implement interfaces and package metadata, typed marker, runtime dependency major bounds httpx<1 and Pydantic>=2,<3. At execution verify current official compatibility, resolve exact dev versions into `requirements-dev.lock`; installation network is not needed during planning.
-- [ ] Run same tests; expected PASS. Build `python -m build`; expect wheel/sdist with py.typed.
-- [ ] Commit: `feat: add typed SDK configuration and wire models`.
+- [x] Test `test_omitted_vs_falsy`: assert to_wire preserves False, 0, '', []; excludes UNSET/unset fields; explicit None rejected unless field annotated nullable. `test_extra_response_preserved` retains unknown response fields. `test_invalid_config` rejects negative retries/timeouts and base URLs containing embedded credentials/query/fragment.
+- [x] Run `python -m pytest tests/unit/test_models.py tests/unit/test_config.py -q`; expected FAIL before implementation.
+- [x] Implement interfaces and package metadata, typed marker, runtime dependency major bounds httpx<1 and Pydantic>=2,<3. At execution verify current official compatibility, resolve exact dev versions into `requirements-dev.lock`; installation network is not needed during planning.
+- [x] Run same tests; expected PASS. Build `python -m build`; expect wheel/sdist with py.typed.
+- [x] Commit: `feat: add typed SDK configuration and wire models`.
 
 ## Task 3: Transport, response parser, retry và redaction — M1
 
@@ -95,13 +95,13 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `redact(value: object, secrets: Collection[str]) -> object`: recursively hide sensitive key values and replace known secrets inside messages before formatting errors.
 - Retry policy consumes operation.read_only, max_retries, attempt and Retry-After; injectable clock/sleeper/random for deterministic tests. Cap total sleep to retry_budget=30s, numeric or HTTP-date Retry-After; invalid values use jittered exponential backoff base0.5s cap8s. Unsafe operations never retry, including network ambiguity.
 
-- [ ] Parametrize sync/async `test_service_routing`, `test_url_encoding`, `test_no_cross_origin_redirect`, `test_session_ownership`, `test_timeout_mapping`: exact service host; quoted path values cannot add slash/query; redirects disabled; owned sessions closed, injected sessions retained; SSL config uses verified defaults/custom Launcher CA.
-- [ ] Add `test_http500_envelope200`, `test_http200_api_error`, `test_bad_json`, `test_missing_status`, `test_zero_envelope_code`: first is HttpError, next ApiError, remainder ProtocolError for envelope operation. Explicit empty/binary operation bypasses envelope parser only as declared.
-- [ ] Add retry tests: default attempts=1; max_retries=2 allows at most3 attempts on read-only429/502/503/504; start/stop/token GET attempts=1; 401/403 no retry; Retry-After date/numeric/corrupt and budget tested with fake clock. Add `test_error_message_secret_redaction`: HTTP body echoes token, password, cookie and proxy credentials; repr/str contain none of provided sentinel strings.
-- [ ] Run `python -m pytest tests/unit/test_transport.py tests/unit/test_response.py tests/unit/test_retry.py tests/unit/test_redaction.py -q`; expected FAIL.
-- [ ] Implement transport and parsers using Task2 interfaces. Separate per-service session ensures Launcher CA does not alter Cloud trust. RequestSpec cannot supply arbitrary absolute URL. Map Launcher connect errors separately, cancellation propagates; redact raw diagnostics. Reject http_code outside200–299 for a success envelope, unless >=400 classified ApiError.
-- [ ] Run same test command; expected PASS sync/async. `python -m mypy src/multilogin_sdk` expected success.
-- [ ] Commit: `feat: implement safe sync and async HTTP transport`.
+- [x] Parametrize sync/async `test_service_routing`, `test_url_encoding`, `test_no_cross_origin_redirect`, `test_session_ownership`, `test_timeout_mapping`: exact service host; quoted path values cannot add slash/query; redirects disabled; owned sessions closed, injected sessions retained; SSL config uses verified defaults/custom Launcher CA.
+- [x] Add `test_http500_envelope200`, `test_http200_api_error`, `test_bad_json`, `test_missing_status`, `test_zero_envelope_code`: first is HttpError, next ApiError, remainder ProtocolError for envelope operation. Explicit empty/binary operation bypasses envelope parser only as declared.
+- [x] Add retry tests: default attempts=1; max_retries=2 allows at most3 attempts on read-only429/502/503/504; start/stop/token GET attempts=1; 401/403 no retry; Retry-After date/numeric/corrupt and budget tested with fake clock. Add `test_error_message_secret_redaction`: HTTP body echoes token, password, cookie and proxy credentials; repr/str contain none of provided sentinel strings.
+- [x] Run `python -m pytest tests/unit/test_transport.py tests/unit/test_response.py tests/unit/test_retry.py tests/unit/test_redaction.py -q`; expected FAIL.
+- [x] Implement transport and parsers using Task2 interfaces. Separate per-service session ensures Launcher CA does not alter Cloud trust. RequestSpec cannot supply arbitrary absolute URL. Map Launcher connect errors separately, cancellation propagates; redact raw diagnostics. Reject http_code outside200–299 for a success envelope, unless >=400 classified ApiError.
+- [x] Run same test command; expected PASS sync/async. `python -m mypy src/multilogin_sdk` expected success.
+- [x] Commit: `feat: implement safe sync and async HTTP transport`.
 
 ## Task 4: Public clients và resource composition — M1
 
@@ -114,11 +114,11 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - Properties auth/workspaces/folders/profiles/launcher become concrete typed resources in Tasks5–7; no public generic arbitrary URL requester.
 - `__enter__/__exit__/close`, `__aenter__/__aexit__/aclose`: repeat close allowed, request after close raises RuntimeError.
 
-- [ ] Write `test_client_lifecycle`, `test_with_token_isolation`, `test_unauthenticated_operation_rejected`, `test_repr_hides_token`: assert ownership and secret behavior above for both clients.
-- [ ] Run `python -m pytest tests/unit/test_client.py -q`; expect FAIL.
-- [ ] Implement public constructors/lifecycle and no implicit token acquisition; connect resource properties as subsequent tasks add classes.
-- [ ] Run client tests and prior unit tests; expect PASS. Core import does not import Selenium/Playwright.
-- [ ] Commit: `feat: expose sync and async Multilogin clients`.
+- [x] Write `test_client_lifecycle`, `test_with_token_isolation`, `test_unauthenticated_operation_rejected`, `test_repr_hides_token`: assert ownership and secret behavior above for both clients.
+- [x] Run `python -m pytest tests/unit/test_client.py -q`; expect FAIL.
+- [x] Implement public constructors/lifecycle and no implicit token acquisition; connect resource properties as subsequent tasks add classes.
+- [x] Run client tests and prior unit tests; expect PASS. Core import does not import Selenium/Playwright.
+- [x] Commit: `feat: expose sync and async Multilogin clients`.
 
 ## Task 5: Authentication, workspaces và folders — M2
 
@@ -132,12 +132,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `folders.create(request: FolderCreateRequest)`, `folders.update(request: FolderUpdateRequest)`, `folders.remove(request: FoldersRemoveRequest)` return ApiResponse[dict[str,object] | None], according to reviewed response data presence. Model fields mirror audit body; define explicit fields after Task1 confirms templates, never reuse disabled query values as runtime defaults.
 - All resources have shared builders `build_<operation>(request) -> RequestSpec`; contract fixtures in `tests/fixtures/access/` are hand-cleaned valid JSON.
 
-- [ ] Test `test_password_hash_once`: password='password' sends `5f4dcc3b5aa765d61d8327deb882cf99`; hash method sends supplied32-hex unchanged and rejects invalid input. Test noauth sign-in has no Authorization header.
-- [ ] Test `test_access_wire_contract` for all8 access MVP request IDs: assert method/path/query/body/header against reviewed fixture, folder body fields never in query; token expiry sent as one enum value. Test `test_workspace_switch_isolation` concurrently reading old client still uses old token. Test response model SecretStr repr hides tokens.
-- [ ] Run `python -m pytest tests/unit/test_auth.py tests/contract/test_access.py -q`; expect FAIL.
-- [ ] Implement models/builders/resources, explicit refresh, client switch helper; consume contract review decisions from Task1. Do not auto-replay requests after401.
-- [ ] Run same tests for sync/async, update8 registry entries implemented with real test_ids; `python scripts/check_coverage.py` passes.
-- [ ] Commit: `feat: add authentication workspace and folder resources`.
+- [x] Test `test_password_hash_once`: password='password' sends `5f4dcc3b5aa765d61d8327deb882cf99`; hash method sends supplied32-hex unchanged and rejects invalid input. Test noauth sign-in has no Authorization header.
+- [x] Test `test_access_wire_contract` for all8 access MVP request IDs: assert method/path/query/body/header against reviewed fixture, folder body fields never in query; token expiry sent as one enum value. Test `test_workspace_switch_isolation` concurrently reading old client still uses old token. Test response model SecretStr repr hides tokens.
+- [x] Run `python -m pytest tests/unit/test_auth.py tests/contract/test_access.py -q`; expect FAIL.
+- [x] Implement models/builders/resources, explicit refresh, client switch helper; consume contract review decisions from Task1. Do not auto-replay requests after401.
+- [x] Run same tests for sync/async, update8 registry entries implemented with real test_ids; `python scripts/check_coverage.py` passes.
+- [x] Commit: `feat: add authentication workspace and folder resources`.
 
 ## Task 6: Browser profile CRUD và offset iterator — M3
 
@@ -149,12 +149,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `profiles.iter_profiles(request: ProfileSearchRequest) -> Iterator[ProfileSummary]`; async returns AsyncIterator. Treat request.offset as first offset; request.limit determines page size.
 - Mutable dict/list defaults use factories; payload model names and JSON types match operation-specific body, not guessed common schema. Create proxy `parameters.proxy`; partial update root `proxy`; empty host retained.
 
-- [ ] Test `test_profile_wire_contract` for7 profile IDs. `test_isp_payload` asserts create host='' retained, times other than1 rejected when isp_ip_id set; partial proxy root and flags nested. `test_partial_preserves_explicit_false` sends auto_update_core=False and excludes omitted auto_update_core; docs explain server default if omitted.
-- [ ] Pagination tests: reject limit0/101 and offset-1/10001; pages at offsets0,100 then short page stop; starting offset10000 with full page raises PaginationLimitError before next request, with short page completes; empty page stops; cancellation makes no further async requests. Iterator must never silently claim complete after ceiling.
-- [ ] Run `python -m pytest tests/contract/test_profiles.py tests/unit/test_profile_models.py tests/unit/test_pagination.py -q`; expect FAIL.
-- [ ] Implement builders/resources/models/iterators. Define nullable fields only from reviewed evidence; unknown request fields rejected. No inferred patch merging or hidden get-before-update.
-- [ ] Same test command passes sync/async; update7 registry entries implemented/test_ids, run coverage CLI.
-- [ ] Commit: `feat: add browser profile resources and pagination`.
+- [x] Test `test_profile_wire_contract` for7 profile IDs. `test_isp_payload` asserts create host='' retained, times other than1 rejected when isp_ip_id set; partial proxy root and flags nested. `test_partial_preserves_explicit_false` sends auto_update_core=False and excludes omitted auto_update_core; docs explain server default if omitted.
+- [x] Pagination tests: reject limit0/101 and offset-1/10001; pages at offsets0,100 then short page stop; starting offset10000 with full page raises PaginationLimitError before next request, with short page completes; empty page stops; cancellation makes no further async requests. Iterator must never silently claim complete after ceiling.
+- [x] Run `python -m pytest tests/contract/test_profiles.py tests/unit/test_profile_models.py tests/unit/test_pagination.py -q`; expect FAIL.
+- [x] Implement builders/resources/models/iterators. Define nullable fields only from reviewed evidence; unknown request fields rejected. No inferred patch merging or hidden get-before-update.
+- [x] Same test command passes sync/async; update7 registry entries implemented/test_ids, run coverage CLI.
+- [x] Commit: `feat: add browser profile resources and pagination`.
 
 ## Task 7: Launcher MVP và typed connection — M3
 
@@ -168,12 +168,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `stop(profile_id: str) -> ApiResponse[None]`; `status(profile_id: str) -> ApiResponse[dict[str,object]]`; `statuses() -> ApiResponse[dict[str,object]]`; `version() -> ApiResponse[dict[str,object]]`. Preserve unknown status values; browser_running is the ready value for Task8.
 - `read_timeout=120` for start/quick, configurable. HTTP deadlines are separate from polling deadline.
 
-- [ ] Write `test_launcher_wire_contract` for6 request IDs: v2 start path, bool query 'true'/'false', quick v3 path, stop/status/version. Assert default strict mode header absent; explicit strict mode validates confirmed required fields and emits true/false literally.
-- [ ] Test string port '55513' normalizes55513; invalid/out-of-range port raises ProtocolError; unknown added fields accepted; start never parses message as port when data.port absent. v1 legacy remains deferred. Test Launcher offline raises LauncherUnavailable with URL and desktop hint, no token.
-- [ ] Run `python -m pytest tests/contract/test_launcher.py tests/unit/test_launcher_models.py -q`; expected FAIL.
-- [ ] Implement builders and typed results; Quick model blocked if Task1 lacks shape evidence, do not mark6 entries complete until resolved. automation compatibility validated when browser_type known (quick); for regular start do not invent browser_type that request does not carry. Document Mimic custom_start_urls limitation.
-- [ ] Same tests pass sync/async, update6 registry IDs/test_ids and run coverage CLI. Total MVP implemented=21.
-- [ ] Commit: `feat: add Launcher v2 start and quick v3 resources`.
+- [x] Write `test_launcher_wire_contract` for6 request IDs: v2 start path, bool query 'true'/'false', quick v3 path, stop/status/version. Assert default strict mode header absent; explicit strict mode validates confirmed required fields and emits true/false literally.
+- [x] Test string port '55513' normalizes55513; invalid/out-of-range port raises ProtocolError; unknown added fields accepted; start never parses message as port when data.port absent. v1 legacy remains deferred. Test Launcher offline raises LauncherUnavailable with URL and desktop hint, no token.
+- [x] Run `python -m pytest tests/contract/test_launcher.py tests/unit/test_launcher_models.py -q`; expected FAIL.
+- [x] Implement builders and typed results; Quick model blocked if Task1 lacks shape evidence, do not mark6 entries complete until resolved. automation compatibility validated when browser_type known (quick); for regular start do not invent browser_type that request does not carry. Document Mimic custom_start_urls limitation.
+- [x] Same tests pass sync/async, update6 registry IDs/test_ids and run coverage CLI. Total MVP implemented=21.
+- [x] Commit: `feat: add Launcher v2 start and quick v3 resources`.
 
 ## Task 8: Owned browser session và bounded polling — M3
 
@@ -184,12 +184,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - `launcher.wait_ready(profile_id: str, *, timeout: float=120, poll_interval: float=1) -> ApiResponse[dict[str,object]]`; use monotonic deadline, ready browser_running, explicit error status names from audit terminate early; unknown status polls until deadline.
 - session start once → ownership recorded after successful start → status poll → yield → stop only returned profile id. Host/port for automation derives configured Launcher host and validated returned port; no executable adapters in MVP.
 
-- [ ] Tests: `test_session_starts_once_and_stops_owned_profile`; `test_failed_start_does_not_stop`; `test_wait_failure_after_start_cleans_up`; `test_body_and_cleanup_failure_preserves_original` asserts original exception propagated and cleanup note is redacted; `test_cleanup_failure_without_original_raises` surfaces stop failure.
-- [ ] `test_async_cancellation_cleanup_bounded` cancels body and fake stop hangs: cleanup attempted under shield+10s deadline, cancellation propagates and no leaked task remains. Fake clock/sleeper tests polling120s ceiling without wall-clock wait and no repeated start. Validate positive timeouts/intervals.
-- [ ] Run `python -m pytest tests/unit/test_session.py -q`; expected FAIL.
-- [ ] Implement lifecycle and polling; use asyncio timeout/shield with explicit task cleanup for async. Stop timeout scoped to cleanup request, not global config mutation.
-- [ ] Same tests pass sync/async, plus existing launcher tests.
-- [ ] Commit: `feat: manage owned browser sessions with bounded cleanup`.
+- [x] Tests: `test_session_starts_once_and_stops_owned_profile`; `test_failed_start_does_not_stop`; `test_wait_failure_after_start_cleans_up`; `test_body_and_cleanup_failure_preserves_original` asserts original exception propagated and cleanup note is redacted; `test_cleanup_failure_without_original_raises` surfaces stop failure.
+- [x] `test_async_cancellation_cleanup_bounded` cancels body and fake stop hangs: cleanup attempted under shield+10s deadline, cancellation propagates and no leaked task remains. Fake clock/sleeper tests polling120s ceiling without wall-clock wait and no repeated start. Validate positive timeouts/intervals.
+- [x] Run `python -m pytest tests/unit/test_session.py -q`; expected FAIL.
+- [x] Implement lifecycle and polling; use asyncio timeout/shield with explicit task cleanup for async. Stop timeout scoped to cleanup request, not global config mutation.
+- [x] Same tests pass sync/async, plus existing launcher tests.
+- [x] Commit: `feat: manage owned browser sessions with bounded cleanup`.
 
 ## Task 9: End-to-end simulation, docs và distributable MVP — M4
 
@@ -200,12 +200,12 @@ Git hiện chưa được khởi tạo. Khi thực thi, kiểm tra lại reposit
 - Simulation uses configured local service URLs for all3 routes; token sentinel only. Consume client public methods, no direct bypass of transport.
 - CI uses Python3.11 and latest stable compatible Python verified at execution; run lint/type/tests/build, then install wheel and sdist separately into clean venvs. No live secrets in default CI.
 
-- [ ] Write `test_create_start_status_stop_workflow` on Postman simulation: assert create ID flows into start/status/stop, cleanup after application error; inject429 on safe search with retries enabled,503 on start must produce only one start, timeout on status cleans up. Write `test_public_api_parity` comparing public sync/async methods/parameters and builder wire output.
-- [ ] Run `python -m pytest tests/integration/test_simulated_workflow.py tests/contract/test_public_api_parity.py -q`; expect FAIL before fixtures/simulation configuration. Load api-simulation skill at execution and follow installed CLI help for scenario setup; keep reusable simulation input in `tests/fixtures/simulation/`. Do not claim local unit stubs are Postman simulation evidence.
-- [ ] Finish simulation, examples and Vietnamese documentation: token setup; sync/async examples; UNSET/null; explicit refresh/workspace switch; owned lifecycle; config/TLS; safe retries; pagination ceiling; 21 implemented IDs and blocked/deferred list. Explicitly state mobile and browser integrations remain later phases.
-- [ ] Add opt-in live smoke; default run must SKIP it. When explicitly enabled, report live outcome separately from simulation and make cleanup evidence visible without exposing secrets.
-- [ ] Run `python -m ruff check .`, `python -m ruff format --check .`, `python -m mypy src/multilogin_sdk`, `python -m pytest tests/unit tests/contract -q`, simulation test command, `python scripts/check_coverage.py`, `python -m build`. Expected: all pass;21 MVP request IDs implemented with existing test IDs,125 total IDs accounted for. Install built wheel and sdist in separate temporary venvs and verify package import/py.typed and both examples' imports; do not publish.
-- [ ] Commit: `docs: ship validated Python SDK MVP with simulation evidence`.
+- [x] Write `test_create_start_status_stop_workflow` on Postman simulation: assert create ID flows into start/status/stop, cleanup after application error; inject429 on safe search with retries enabled,503 on start must produce only one start, timeout on status cleans up. Write `test_public_api_parity` comparing public sync/async methods/parameters and builder wire output.
+- [x] Run `python -m pytest tests/integration/test_simulated_workflow.py tests/contract/test_public_api_parity.py -q`; expect FAIL before fixtures/simulation configuration. Load api-simulation skill at execution and follow installed CLI help for scenario setup; keep reusable simulation input in `tests/fixtures/simulation/`. Do not claim local unit stubs are Postman simulation evidence.
+- [x] Finish simulation, examples and Vietnamese documentation: token setup; sync/async examples; UNSET/null; explicit refresh/workspace switch; owned lifecycle; config/TLS; safe retries; pagination ceiling; 21 implemented IDs and blocked/deferred list. Explicitly state mobile and browser integrations remain later phases.
+- [x] Add opt-in live smoke; default run must SKIP it. When explicitly enabled, report live outcome separately from simulation and make cleanup evidence visible without exposing secrets.
+- [x] Run `python -m ruff check .`, `python -m ruff format --check .`, `python -m mypy src/multilogin_sdk`, `python -m pytest tests/unit tests/contract -q`, simulation test command, `python scripts/check_coverage.py`, `python -m build`. Expected: all pass;21 MVP request IDs implemented with existing test IDs,125 total IDs accounted for. Install built wheel and sdist in separate temporary venvs and verify package import/py.typed and both examples' imports; do not publish.
+- [x] Commit: `docs: ship validated Python SDK MVP with simulation evidence`.
 
 ## Self-review và handoff
 

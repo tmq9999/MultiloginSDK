@@ -24,6 +24,7 @@ _FLAGS = (
     "startup_behavior",
 )
 STRICT_FIELDS: dict[str, tuple[str, ...]] = {
+    "profile_remove": ("ids", "permanently"),
     "profile_create": (
         "name",
         "browser_type",
