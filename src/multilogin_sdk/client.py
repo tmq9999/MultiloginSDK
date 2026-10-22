@@ -7,6 +7,7 @@ import httpx
 from ._operations import Service
 from ._transport import SERVICES, AsyncTransport, SyncTransport
 from .config import ClientConfig
+from .resources.launcher import LauncherResource, AsyncLauncherResource
 from .resources.profiles import ProfilesResource, AsyncProfilesResource
 from .resources.auth import AuthResource, AsyncAuthResource
 from .resources.workspaces import WorkspacesResource, AsyncWorkspacesResource
@@ -29,6 +30,7 @@ class MultiloginClient:
         self.workspaces = WorkspacesResource(self._transport)
         self.folders = FoldersResource(self._transport)
         self.profiles = ProfilesResource(self._transport)
+        self.launcher = LauncherResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)
@@ -59,6 +61,7 @@ class AsyncMultiloginClient:
         self.workspaces = AsyncWorkspacesResource(self._transport)
         self.folders = AsyncFoldersResource(self._transport)
         self.profiles = AsyncProfilesResource(self._transport)
+        self.launcher = AsyncLauncherResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)

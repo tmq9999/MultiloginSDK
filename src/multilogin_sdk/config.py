@@ -14,6 +14,7 @@ class ClientConfig:
     cookies_url: str = 'https://cookies.multilogin.com'
     strict_mode: bool | None = None
     timeout: httpx.Timeout = field(default_factory=lambda: httpx.Timeout(30, connect=10))
+    start_timeout: float = 120
     max_retries: int = 0
     retry_budget: float = 30
     launcher_ca: ssl.SSLContext | None = field(default=None, repr=False)
@@ -25,6 +26,8 @@ class ClientConfig:
                     or p.password is not None or p.query or p.fragment or p.path not in {'', '/'}):
                 raise ValueError('Service URL must be an HTTP(S) origin without credentials, path, query or fragment')
             _ = p.port
+        if not math.isfinite(self.start_timeout) or self.start_timeout <= 0:
+            raise ValueError('start_timeout must be finite and positive')
         if isinstance(self.max_retries, bool) or not isinstance(self.max_retries, int) or self.max_retries < 0:
             raise ValueError('max_retries must be a non-negative integer')
         if not math.isfinite(self.retry_budget) or self.retry_budget < 0:

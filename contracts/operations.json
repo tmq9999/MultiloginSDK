@@ -9,9 +9,11 @@
     "path": "/api/v2/profile/f/{folder_id}/p/{profile_id}/start",
     "body_kind": null,
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -24,9 +26,11 @@
     "path": "/api/v3/profile/quick",
     "body_kind": "text",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -54,9 +58,11 @@
     "path": "/api/v1/profile/stop/p/{profile_id}",
     "body_kind": null,
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -83,10 +89,12 @@
     "method": "GET",
     "path": "/api/v1/version",
     "body_kind": "json",
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -98,10 +106,12 @@
     "method": "GET",
     "path": "/api/v1/profile/status/p/{profile_id}",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -113,10 +123,12 @@
     "method": "GET",
     "path": "/api/v1/profile/statuses",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Launcher v2/v3 wire contract and typed connection tests",
+    "test_ids": [
+      "tests/contract/test_launcher.py::test_launcher_wire_contract"
+    ],
     "alias_of": null
   },
   {

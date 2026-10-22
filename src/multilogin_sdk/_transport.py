@@ -9,6 +9,7 @@ import httpx
 from ._operations import RequestSpec, Service
 from ._response import parse_response
 from ._retry import retry_delay
+from ._strict import validate_strict
 from .config import ClientConfig
 from .errors import LauncherUnavailable, TransportError
 from .models.common import ApiResponse
@@ -41,6 +42,8 @@ class _Common:
         if op.auth_required:
             headers['Authorization'] = 'Bearer ' + self._tokens[op.service]
         strict = spec.strict_mode if spec.strict_mode is not None else self.config.strict_mode
+        if strict is True:
+            validate_strict(spec)
         if strict is not None:
             headers['X-Strict-Mode'] = str(strict).lower()
         query = {k: str(v).lower() if isinstance(v, bool) else v for k, v in spec.query.items()}
