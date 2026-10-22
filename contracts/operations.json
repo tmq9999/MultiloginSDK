@@ -520,9 +520,11 @@
     "path": "/profile/create",
     "body_kind": "text",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -534,10 +536,12 @@
     "method": "POST",
     "path": "/profile/search",
     "body_kind": "json",
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -550,9 +554,11 @@
     "path": "/profile/remove",
     "body_kind": "json",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -565,9 +571,11 @@
     "path": "/profile/update",
     "body_kind": "text",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -595,9 +603,11 @@
     "path": "/profile/partial_update",
     "body_kind": "text",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -610,9 +620,11 @@
     "path": "/profile/restore",
     "body_kind": "json",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
@@ -625,9 +637,11 @@
     "path": "/profile/metas",
     "body_kind": "json",
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "Reviewed profile wire payload; sync/async tests",
+    "test_ids": [
+      "tests/contract/test_profiles.py::test_profile_wire_contract"
+    ],
     "alias_of": null
   },
   {
