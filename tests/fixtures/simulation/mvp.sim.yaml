@@ -1,0 +1,19 @@
+# Simulation scaffold. Add fault-injection scenarios under each mock, e.g.:
+#   scenarios:
+#     - overrides:
+#         conditions:
+#           latency: { delay_ms: 500 }
+# Then serve it with: postman simulation run <this file>
+
+simulation: multilogin-sdk-mvp
+routing: path
+mocks:
+  - name: sdk-cloud
+    routeKey: cloud
+    path: ./cloud
+  - name: sdk-launcher
+    routeKey: launcher
+    path: ./launcher
+  - name: sdk-cookies
+    routeKey: cookies
+    path: ./cookies

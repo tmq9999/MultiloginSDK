@@ -213,4 +213,4 @@ Coverage M0→Task1; M1→Tasks2–4; M2→Task5; M3→Tasks6–8; M4→Task9. R
 
 Implementation remains blocked only per operation by unresolved contract evidence; research/other tasks can proceed. MVP cannot be declared complete if one of its21 requests remains blocked. Resolve and record evidence or return a concrete scope change for review.
 
-Plan review pending. Recommended execution: Native — shared transport/models make tasks strongly sequential and this avoids a fresh implementer context for each boundary. Subagent-driven remains an option if the user prefers separate task review. Final whole-branch review follows chosen skill and actual available reviewer tooling; do not invent tool/model support.
+Plan approved by user; execution: Native. Recommended execution: Native — shared transport/models make tasks strongly sequential and this avoids a fresh implementer context for each boundary. Subagent-driven remains an option if the user prefers separate task review. Final whole-branch review follows chosen skill and actual available reviewer tooling; do not invent tool/model support.

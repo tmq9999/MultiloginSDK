@@ -1,10 +1,13 @@
 """Declarative requests shared by sync and async execution."""
-import httpx
+
+from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 
-Service = Literal['cloud', 'launcher', 'cookies']
+import httpx
+
+Service = Literal["cloud", "launcher", "cookies"]
 
 
 @dataclass(frozen=True)
@@ -15,7 +18,7 @@ class Operation:
     path: str
     read_only: bool = False
     auth_required: bool = True
-    response_kind: Literal['envelope', 'empty', 'binary'] = 'envelope'
+    response_kind: Literal["envelope", "empty", "binary"] = "envelope"
     read_timeout: float | None = None
 
 
@@ -29,6 +32,10 @@ class RequestSpec:
     timeout: httpx.Timeout | None = None
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, 'path_params', deepcopy(dict(self.path_params)))
-        object.__setattr__(self, 'query', deepcopy(dict(self.query)))
-        object.__setattr__(self, 'json_body', deepcopy(dict(self.json_body)) if self.json_body is not None else None)
+        object.__setattr__(self, "path_params", deepcopy(dict(self.path_params)))
+        object.__setattr__(self, "query", deepcopy(dict(self.query)))
+        object.__setattr__(
+            self,
+            "json_body",
+            deepcopy(dict(self.json_body)) if self.json_body is not None else None,
+        )

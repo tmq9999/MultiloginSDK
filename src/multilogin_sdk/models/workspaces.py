@@ -1,5 +1,7 @@
 """Workspace and folder wire fields."""
+
 from pydantic import Field
+
 from .common import RequestModel, ResponseModel
 
 
@@ -17,7 +19,7 @@ class WorkspacesData(ResponseModel):
 class Folder(ResponseModel):
     folder_id: str
     name: str
-    comment: str = ''
+    comment: str = ""
     profiles_count: int = 0
 
 
@@ -27,13 +29,13 @@ class FoldersData(ResponseModel):
 
 class FolderCreateRequest(RequestModel):
     name: str = Field(min_length=1)
-    comment: str = ''
+    comment: str = ""
 
 
 class FolderUpdateRequest(RequestModel):
     folder_id: str = Field(min_length=1)
     name: str = Field(min_length=1)
-    comment: str = ''
+    comment: str = ""
 
 
 class FoldersRemoveRequest(RequestModel):

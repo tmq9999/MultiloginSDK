@@ -2,8 +2,15 @@
 
 
 class MultiloginError(Exception):
-    def __init__(self, message: str, *, operation: str = '', status_code: int | None = None,
-                 api_error_code: str | None = None, request_id: str | None = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        operation: str = "",
+        status_code: int | None = None,
+        api_error_code: str | None = None,
+        request_id: str | None = None,
+    ) -> None:
         super().__init__(message)
         self.operation = operation
         self.status_code = status_code

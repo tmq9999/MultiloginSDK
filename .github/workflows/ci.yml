@@ -1,0 +1,56 @@
+name: Python SDK
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m pip install -e .
+      - run: python -m ruff check .
+      - run: python -m ruff format --check .
+      - run: python -m mypy src/multilogin_sdk
+      - run: python -m pytest -q
+      - run: python scripts/check_coverage.py
+      - run: python -m build
+      - name: Install wheel and sdist in isolated environments
+        shell: bash
+        run: |
+          python -m venv /tmp/sdk-wheel
+          /tmp/sdk-wheel/bin/pip install dist/*.whl
+          /tmp/sdk-wheel/bin/python -c "import multilogin_sdk; from importlib.resources import files; assert files('multilogin_sdk').joinpath('py.typed').is_file()"
+          python -m venv /tmp/sdk-sdist
+          /tmp/sdk-sdist/bin/pip install dist/*.tar.gz
+          /tmp/sdk-sdist/bin/python -c "from multilogin_sdk import MultiloginClient, AsyncMultiloginClient"
+  simulation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m pip install -e .
+      - run: npm install -g postman-cli@1.76.0
+      - name: Run SDK over real HTTP against Postman simulation
+        shell: bash
+        run: |
+          postman simulation run tests/fixtures/simulation/mvp.sim.yaml --port 4900 --output ndjson --no-history > /tmp/sdk-simulation.ndjson 2> /tmp/sdk-simulation.err &
+          trap 'pkill -INT -f "postman simulation run tests/fixtures/simulation/mvp.sim.yaml" || true' EXIT
+          for attempt in {1..60}; do
+            if python -c "import json; assert any(json.loads(s).get('event') == 'listening' for s in open('/tmp/sdk-simulation.ndjson') if s.strip())" 2>/dev/null; then break; fi
+            sleep 0.5
+          done
+          MULTILOGIN_SIMULATION=1 python -m pytest tests/integration/test_simulated_workflow.py -q
+          python -c "import json; events=[json.loads(s) for s in open('/tmp/sdk-simulation.ndjson') if s.strip()]; assert any(e.get('event')=='request' for e in events)"
