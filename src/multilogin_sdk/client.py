@@ -10,9 +10,14 @@ from ._operations import Service
 from ._transport import SERVICES, AsyncTransport, SyncTransport
 from .config import ClientConfig
 from .resources.auth import AsyncAuthResource, AuthResource
+from .resources.cookies import AsyncCookiesResource, CookiesResource
+from .resources.fingerprints import AsyncFingerprintsResource, FingerprintsResource
 from .resources.folders import AsyncFoldersResource, FoldersResource
 from .resources.launcher import AsyncLauncherResource, LauncherResource
+from .resources.mobile import AsyncMobileResource, MobileResource
+from .resources.objects import AsyncObjectsResource, ObjectsResource
 from .resources.profiles import AsyncProfilesResource, ProfilesResource
+from .resources.proxies import AsyncProxiesResource, ProxiesResource
 from .resources.workspaces import AsyncWorkspacesResource, WorkspacesResource
 
 
@@ -42,6 +47,11 @@ class MultiloginClient:
         self.folders = FoldersResource(self._transport)
         self.profiles = ProfilesResource(self._transport)
         self.launcher = LauncherResource(self._transport)
+        self.proxies = ProxiesResource(self._transport)
+        self.objects = ObjectsResource(self._transport)
+        self.mobile = MobileResource(self._transport)
+        self.fingerprints = FingerprintsResource(self._transport)
+        self.cookies = CookiesResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)
@@ -87,6 +97,11 @@ class AsyncMultiloginClient:
         self.folders = AsyncFoldersResource(self._transport)
         self.profiles = AsyncProfilesResource(self._transport)
         self.launcher = AsyncLauncherResource(self._transport)
+        self.proxies = AsyncProxiesResource(self._transport)
+        self.objects = AsyncObjectsResource(self._transport)
+        self.mobile = AsyncMobileResource(self._transport)
+        self.fingerprints = AsyncFingerprintsResource(self._transport)
+        self.cookies = AsyncCookiesResource(self._transport)
 
     def with_token(self, token: str) -> Self:
         return type(self)(token, config=self.config)

@@ -433,10 +433,10 @@
     "method": "GET",
     "path": "/workspace/statistics",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated read-only workspace statistics",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -710,10 +710,10 @@
     "method": "GET",
     "path": "/fpb/resolutions",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated read-only fingerprint resolution catalogue",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -875,10 +875,10 @@
     "method": "GET",
     "path": "/proxynm/user",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated read-only proxy account data",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -890,10 +890,10 @@
     "method": "GET",
     "path": "/proxynm/isp/proxies",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated read-only ISP proxy listing",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -905,10 +905,10 @@
     "method": "GET",
     "path": "/api/v1/cookies/metadata/websites",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated pre-made-cookie website catalogue",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -1160,10 +1160,10 @@
     "method": "GET",
     "path": "/api/v1/resources/types",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated object type catalogue",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -1175,10 +1175,10 @@
     "method": "GET",
     "path": "/api/v1/resources/statistics",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated object-storage statistics",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -1565,10 +1565,10 @@
     "method": "GET",
     "path": "/mobile_profiles/phone/list",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated mobile profile list",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {
@@ -1775,10 +1775,10 @@
     "method": "GET",
     "path": "/mobile_profiles/limit",
     "body_kind": null,
-    "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "read_only": true,
+    "status": "implemented",
+    "reason": "Live-validated mobile profile allowance",
+    "test_ids": ["tests/contract/test_live_discovery_resources.py::test_live_discovery_resource_wire_contract"],
     "alias_of": null
   },
   {

@@ -12,12 +12,27 @@ def build_list() -> RequestSpec:
     )
 
 
+def build_statistics() -> RequestSpec:
+    return RequestSpec(
+        Operation(
+            "workspace_statistics",
+            "cloud",
+            "GET",
+            "/workspace/statistics",
+            read_only=True,
+        )
+    )
+
+
 class WorkspacesResource:
     def __init__(self, transport: SyncTransport) -> None:
         self._transport = transport
 
     def list(self) -> ApiResponse[WorkspacesData]:
         return self._transport.send(build_list(), WorkspacesData)
+
+    def statistics(self) -> ApiResponse[dict[str, object]]:
+        return self._transport.send(build_statistics(), dict[str, object])
 
 
 class AsyncWorkspacesResource:
@@ -26,3 +41,6 @@ class AsyncWorkspacesResource:
 
     async def list(self) -> ApiResponse[WorkspacesData]:
         return await self._transport.send(build_list(), WorkspacesData)
+
+    async def statistics(self) -> ApiResponse[dict[str, object]]:
+        return await self._transport.send(build_statistics(), dict[str, object])
