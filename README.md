@@ -8,6 +8,21 @@ Python SDK typed, sync và async cho Multilogin Cloud API, Launcher cục bộ v
 
 Repository là private. Máy cài cần quyền đọc repository qua GitHub credential, SSH key, GitHub CLI hoặc PAT có quyền `repo`.
 
+Nếu dùng HTTPS và GitHub CLI đã đăng nhập, cấu hình Git lấy credential qua CLI một lần:
+
+```bash
+gh auth login
+gh auth setup-git
+```
+
+Nếu dùng SSH, kiểm tra quyền truy cập trước khi cài:
+
+```bash
+ssh -T git@github.com
+```
+
+Không đặt PAT trực tiếp trong URL cài đặt vì URL có thể lưu vào shell history và log pip.
+
 ```bash
 # Cài branch hiện tại
 python -m pip install "git+https://github.com/tmq9999/MultiloginSDK.git@feat/python-sdk-mvp"
@@ -32,6 +47,14 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
 python -c "from multilogin_sdk import MultiloginClient; print('MultiloginSDK ready')"
+```
+
+Trên Windows PowerShell, tạo và bật virtual environment như sau:
+
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install "git+https://github.com/tmq9999/MultiloginSDK.git@feat/python-sdk-mvp"
 ```
 
 ## Xác thực và cấu hình
@@ -108,17 +131,23 @@ asyncio.run(main())
 Khi có email/mật khẩu, SDK có thể gọi luồng Cloud API. Lấy password từ secret manager hoặc environment, không ghi vào source code.
 
 ```python
+import getpass
+import os
+
 from multilogin_sdk import MultiloginClient
 
-with MultiloginClient() as anonymous:
-    tokens = anonymous.auth.sign_in(email="user@example.com", password="secret").data
+email = os.environ["MULTILOGIN_EMAIL"]
+password = os.environ.get("MULTILOGIN_PASSWORD") or getpass.getpass("Multilogin password: ")
 
-client = MultiloginClient(tokens.token.get_secret_value())
-try:
+with MultiloginClient() as anonymous:
+    tokens = anonymous.auth.sign_in(email=email, password=password).data
+    access_token = tokens.token.get_secret_value()
+    refresh_token = tokens.refresh_token.get_secret_value()
+
+with MultiloginClient(access_token) as client:
+    # Chỉ tạo token mới nếu ứng dụng cần automation token riêng.
     automation = client.auth.automation_token("1w").data
-    print(automation.token.get_secret_value())
-finally:
-    client.close()
+    os.environ["MULTILOGIN_TOKEN"] = automation.token.get_secret_value()
 ```
 
 `sign_in` hash password theo wire protocol Multilogin. `automation_token(...)` tạo token mới, nên có side effect. Kỳ hạn: `1h`, `3h`, `5h`, `16h`, `24h`, `48h`, `1w`, `2w`, `3w`, `1mo`, `no_exp`.
@@ -136,6 +165,8 @@ try:
 finally:
     next_client.close()
 ```
+
+Nếu đã có access token và refresh token, gọi trực tiếp `client.auth.refresh(email, refresh_token, workspace_id)` để nhận cặp token mới. Auth payload không dùng Authorization header; các request workspace/profile sau đăng nhập mới dùng bearer token.
 
 ## Khởi chạy browser
 
@@ -160,6 +191,55 @@ with MultiloginClient(os.environ["MULTILOGIN_TOKEN"]) as client:
 `launcher.session(...)` chỉ stop profile mà chính session start, kể cả khi code bên trong lỗi. Nếu start timeout hoặc response lỗi, SDK không tự replay start/stop; hãy kiểm tra trạng thái Launcher trước khi thao tác lại.
 
 Stealthfox chỉ hỗ trợ Selenium theo collection. Mimic hỗ trợ Selenium, Puppeteer và Playwright. Khi truyền automation, hãy mở URL bằng automation client thay vì dựa vào `custom_start_urls`.
+
+Async dùng cùng quy tắc sở hữu session:
+
+```python
+import asyncio
+import os
+
+from multilogin_sdk import AsyncMultiloginClient
+from multilogin_sdk.models.launcher import LauncherStartRequest
+
+
+async def launch() -> None:
+    request = LauncherStartRequest(
+        folder_id=os.environ["MULTILOGIN_FOLDER_ID"],
+        profile_id=os.environ["MULTILOGIN_PROFILE_ID"],
+        automation_type="playwright",
+    )
+    async with AsyncMultiloginClient(os.environ["MULTILOGIN_TOKEN"]) as client:
+        async with client.launcher.session(request) as connection:
+            print(connection.port)
+
+
+asyncio.run(launch())
+```
+
+## Tạo folder và profile
+
+Mutation nhận các Pydantic request model. Tạo profile sẽ dùng folder hiện có; `create` trả data có `ids` của profile vừa tạo.
+
+```python
+import os
+
+from multilogin_sdk import MultiloginClient
+from multilogin_sdk.models.profiles import ProfileCreateRequest
+from multilogin_sdk.models.workspaces import FolderCreateRequest
+
+with MultiloginClient(os.environ["MULTILOGIN_TOKEN"]) as client:
+    folder = client.folders.create(
+        FolderCreateRequest(name="sdk-test", comment="Created by my app")
+    )
+    folder_id = str(folder.data["id"])
+
+    created = client.profiles.create(
+        ProfileCreateRequest(name="example-profile", folder_id=folder_id)
+    )
+    profile_id = str(created.data["ids"][0])
+```
+
+Không xóa folder/profile của người dùng trong ví dụ khởi động. `profiles.remove(..., permanently=False)` là soft delete; đặt `permanently=True` sẽ xóa vĩnh viễn theo contract.
 
 ## Resource đã hỗ trợ
 
@@ -186,12 +266,21 @@ Request model nằm trong `multilogin_sdk.models.profiles`, `.workspaces` và `.
 
 `ClientConfig(strict_mode=True)` gửi `X-Strict-Mode: true` và kiểm tra các field strict đã xác nhận trong collection.
 
+Model create/full update đặt proxy ở `parameters.proxy`; partial update đặt proxy ở root. ISP proxy yêu cầu `host=""` và `times=1` khi tạo profile. Khi chỉ cập nhật vài field, dùng `ProfilePartialUpdateRequest`; bỏ `auto_update_core` khỏi payload có thể khiến server bật lại mặc định, vì vậy gửi `False` tường minh nếu cần giữ core hiện tại.
+
 ## Cấu hình HTTP và lỗi
 
 ```python
+import httpx
+
 from multilogin_sdk import ClientConfig, MultiloginClient
 
-config = ClientConfig(timeout=30, start_timeout=120, max_retries=2, retry_budget=30)
+config = ClientConfig(
+    timeout=httpx.Timeout(30, connect=10),
+    start_timeout=120,
+    max_retries=2,
+    retry_budget=30,
+)
 client = MultiloginClient("token", config=config)
 ```
 
@@ -204,6 +293,26 @@ TLS verification bật mặc định. Connect timeout mặc định 10 giây; re
 | `ProtocolError` | Envelope/payload không khớp contract |
 | `TransportError` | Lỗi kết nối hoặc timeout |
 | `LauncherUnavailable` | Không kết nối được Launcher |
+
+Xử lý lỗi ở ranh giới tác vụ, ghi operation/status code, và không log token hoặc body:
+
+```python
+import os
+
+from multilogin_sdk import MultiloginClient
+from multilogin_sdk.errors import ApiError, HttpError, TransportError
+from multilogin_sdk.models.profiles import ProfileSearchRequest
+
+try:
+    with MultiloginClient(os.environ["MULTILOGIN_TOKEN"]) as client:
+        page = client.profiles.search(ProfileSearchRequest(limit=10, offset=0))
+except ApiError as exc:
+    print("Multilogin từ chối request:", exc.operation, exc.api_error_code)
+except HttpError as exc:
+    print("HTTP lỗi:", exc.operation, exc.status_code)
+except TransportError as exc:
+    print("Không gọi được API:", exc.operation)
+```
 
 SDK không đưa raw response body hoặc raw server message vào exception để tránh rò rỉ credential. Token và refresh token dùng `SecretStr`; chỉ gọi `.get_secret_value()` khi thực sự cần.
 
@@ -230,10 +339,10 @@ Postman simulation kiểm tra HTTP workflow cục bộ, không chứng minh API 
 MULTILOGIN_SIMULATION=1 python -m pytest tests/integration/test_simulated_workflow.py -q
 ```
 
-Live smoke mặc định skip. Chỉ bật trong workspace thử nghiệm vì test tạo profile rồi soft-delete profile do chính nó tạo:
+Live smoke mặc định skip. Chỉ bật bằng `MULTILOGIN_LIVE_TEST=1` trong workspace thử nghiệm vì test tạo profile rồi soft-delete profile do chính nó tạo:
 
 ```bash
-MULTILOGIN_LIVE=1 \
+MULTILOGIN_LIVE_TEST=1 \
 MULTILOGIN_TOKEN='...' \
 MULTILOGIN_TEST_WORKSPACE_ID='...' \
 MULTILOGIN_TEST_FOLDER_ID='...' \
