@@ -126,6 +126,35 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+`AsyncMultiloginClient` cũng có đầy đủ auth methods. Đăng nhập bất đồng bộ như sau:
+
+```python
+import asyncio
+import getpass
+import os
+
+from multilogin_sdk import AsyncMultiloginClient
+
+
+async def main() -> None:
+    email = os.environ["MULTILOGIN_EMAIL"]
+    password = os.environ.get("MULTILOGIN_PASSWORD") or getpass.getpass(
+        "Multilogin password: "
+    )
+
+    async with AsyncMultiloginClient() as anonymous:
+        tokens = (await anonymous.auth.sign_in(email=email, password=password)).data
+
+    async with AsyncMultiloginClient(tokens.token.get_secret_value()) as client:
+        workspaces = await client.workspaces.list()
+        print(workspaces.data.total_count)
+
+
+asyncio.run(main())
+```
+
+Các method auth async tương ứng là `await client.auth.refresh(...)` và `await client.auth.automation_token("1w")`. Refresh cần email, refresh token và workspace ID; tạo automation token có side effect giống bản sync.
+
 ## Đăng nhập, refresh token và workspace
 
 Khi có email/mật khẩu, SDK có thể gọi luồng Cloud API. Lấy password từ secret manager hoặc environment, không ghi vào source code.
