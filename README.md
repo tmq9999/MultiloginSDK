@@ -4,7 +4,7 @@ Python SDK typed, sync và async cho Multilogin Cloud API, Launcher cục bộ v
 
 Dependencies runtime: `httpx>=0.28,<1` và `pydantic>=2,<3`. Selenium, Playwright và Puppeteer không phải dependency của SDK; Launcher trả connection port để ứng dụng nối bằng thư viện automation riêng.
 
-`0.1.0` hiện triển khai **30/125** request đã audit. Các endpoint đã có contract test; profile search và 9 endpoint discovery đã được xác nhận bằng response API thật. Package chưa phát hành lên PyPI.
+`0.1.0` hiện triển khai **31/125** request đã audit. Các endpoint đã có contract test; profile search và 9 endpoint discovery đã được xác nhận bằng response API thật. Package chưa phát hành lên PyPI.
 
 ## Cài vào project khác
 
@@ -379,7 +379,7 @@ Ví dụ cleanup dùng `permanently=True` chỉ cho profile thử nghiệm vừa
 | `folders` | `list`, `create`, `update`, `remove` |
 | `profiles` | `create`, `search`, `iter_profiles`, `update`, `partial_update`, `remove`, `restore`, `metas` |
 | `launcher` | `start`, `start_quick`, `stop`, `status`, `statuses`, `version`, `wait_ready`, `session` |
-| `proxies` | `user`, `isp_proxies` |
+| `proxies` | `user`, `isp_proxies`, `generate` |
 | `objects` | `types`, `statistics` |
 | `mobile` | `limit`, `list` |
 | `fingerprints` | `resolutions` |

@@ -6,7 +6,7 @@ from multilogin_sdk import AsyncMultiloginClient, MultiloginClient
 def test_public_api_parity():
     sync = MultiloginClient("T")
     async_ = AsyncMultiloginClient("T")
-    for name in ["auth", "workspaces", "folders", "profiles", "launcher"]:
+    for name in ["auth", "workspaces", "folders", "profiles", "launcher", "proxies"]:
         a = getattr(sync, name)
         b = getattr(async_, name)
         public = {m for m in dir(a) if not m.startswith("_")}

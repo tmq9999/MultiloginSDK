@@ -861,9 +861,15 @@
     "path": "/proxynm/connection_url",
     "body_kind": null,
     "read_only": false,
-    "status": "deferred",
-    "reason": "Not implemented",
-    "test_ids": [],
+    "status": "implemented",
+    "reason": "proxies.generate wire contract (query, bounds, no auto-retry, credential redaction); not verified against live API",
+    "test_ids": [
+      "tests/contract/test_proxy_generate.py::test_generate_wire_contract",
+      "tests/contract/test_proxy_generate.py::test_generate_omits_unset_optional_params",
+      "tests/contract/test_proxy_generate.py::test_generate_request_validation",
+      "tests/contract/test_proxy_generate.py::test_generate_never_auto_retries",
+      "tests/contract/test_proxy_generate.py::test_generate_redacts_credentials"
+    ],
     "alias_of": null
   },
   {
